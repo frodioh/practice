@@ -105,99 +105,7 @@ app.post('/auth', function(req,res) {
 });
 app.get('/admin.html', function(req,res) {
   res.setHeader('Content-Type', 'text/html; charset=utf8');
-  res.render('admin', skills);
-});
-app.get('/blog.html', function(req,res) {
-  var posts = {
-    post: null
-  }
-  var items = Post.find({}, null, null, function(err, docs) {
-    var months = [
-      'января',
-      'февраля',
-      'марта',
-      'апреля',
-      'мая',
-      'июня',
-      'июля',
-      'августа',
-      'сентября',
-      'октября',
-      'ноября',
-      'декабря'
-    ];
-    if (!err) {
-      posts.post = docs;
-      docs.forEach(function(item, index) {
-        var mas = item.date.split('.');
-        var cur = parseInt(mas[1])-1;
-        var date = mas[0]+' '+months[cur]+' '+mas[2];
-        posts.post[index].date = date;
-      });
-      res.setHeader('Content-Type', 'text/html; charset=utf8');
-      res.render('blog', posts);
-    }
-  })
-});
-
-app.get('/about.html', function(req,res) {
-  var skills = {
-    "frontend": {
-      "html": 0,
-      "css": 0,
-      "js": 0
-    },
-    "workflow": {
-      "git": 0,
-      "gulp": 0,
-      "bower": 0
-    },
-    "backend": {
-      "php": 0,
-      "nodejs": 0,
-      "mongodb": 0
-    }
-  };
-  Skill.findOne({section: "frontend"}, function(err,doc) {
-    if(!err) {
-      skills.frontend.html = doc.items[0].value;
-      skills.frontend.css = doc.items[1].value;
-      skills.frontend.js = doc.items[2].value;
-    }
-    Skill.findOne({section: "workflow"}, function(err,doc) {
-      if(!err) {
-        skills.workflow.git = doc.items[0].value;
-        skills.workflow.gulp = doc.items[1].value;
-        skills.workflow.bower = doc.items[2].value;
-      }
-      Skill.findOne({section: "backend"}, function(err,doc) {
-        if(!err) {
-          skills.backend.php = doc.items[0].value;
-          skills.backend.nodejs = doc.items[1].value;
-          skills.backend.mongodb = doc.items[2].value;
-          res.setHeader('Content-Type', 'text/html; charset=utf8');
-          res.render('about', skills);
-        }
-      });
-    });
-  });
-});
-
-app.post('/mail', function(req,res) {
-  console.log(req.body);
-  var transporter = nodemailer.createTransport(config.mail.smtp);
-  var mailOptions = {
-      from: `"${req.body.name}" <${req.body.email}>`,
-      to: config.mail.smtp.auth.user,
-      subject: config.mail.subject,
-      text: req.body.text.trim().slice(0, 500)
-  };
-  transporter.sendMail(mailOptions, function(error, info){
-      if(error){
-          return console.log(error);
-      }
-      res.json({});
-  });
+  res.render('admin');
 });
 //Остальные маршруты
 app.get('/*', function(req, res) {
@@ -222,180 +130,113 @@ app.get('/*', function(req, res) {
   res.end();
 });
 //AJAX запросы
-app.post('/skills', function(req,res) {
-  var data = req.body;
-  var counter = 0;
-  var counterValid = 0;
-  console.log(data);
-  for (var item in data) {
-    var buf = data[item];
-    for (var val in buf) {
-      console.log(buf[val]);
-      counter++;
-      if ((+buf[val]>=0)&&(+buf[val]<=100)) {
-        counterValid++;
-      }
-    }
-  }
-  if (counter===counterValid) {
-    var valid = {
-      "isValid": true
-    };
-    valid = JSON.stringify(valid);
-    res.setHeader('Content-Type', 'application/json; charset=utf8;');
-    res.end(valid);
-    var frontend = {
-      section: "frontend",
-      items: [
-        {
-          name: "html",
-          value: +data.frontend.html
-        },
-        {
-          name: "css",
-          value: +data.frontend.css
-        },
-        {
-          name: "js",
-          value: +data.frontend.js
-        }
-        ]
-    };
-    var workflow = {
-      section: "workflow",
-      items: [
-        {
-          name: "git",
-          value: +data.workflow.git
-        },
-        {
-          name: "gulp",
-          value: +data.workflow.gulp
-        },
-        {
-          name: "bower",
-          value: +data.workflow.bower
-        }
-      ]
-    };
-    var backend = {
-      section: "backend",
-      items: [
-        {
-          name: "php",
-          value: +data.backend.php
-        },
-        {
-          name: "nodejs",
-          value: +data.backend.nodejs
-        },
-        {
-          name: "mongodb",
-          value: +data.backend.mongodb
-        }
-      ]
-    };
-    Skill.findOne({ section: "frontend" }, function (err, doc){
-      if (!doc) {
-        var doc = new Skill(frontend);
-      } else {
-        doc.items = frontend.items;
-      }
-      doc.save();
-    });
-    Skill.findOne({ section: "workflow" }, function (err, doc){
-      if (!doc) {
-        var doc = new Skill(workflow);
-      } else {
-        doc.items = workflow.items;
-      }
-      doc.save();
-    });
-    Skill.findOne({ section: "backend" }, function (err, doc){
-      if (!doc) {
-        var doc = new Skill(backend);
-      } else {
-        doc.items = backend.items;
-      }
-      doc.save();
-    });
-  } else {
-    var valid = {
-      "isValid": false
-    };
-    valid = JSON.stringify(valid);
-    res.setHeader('Content-Type', 'application/json; charset=utf8;');
-    res.end(valid);
-  }
-  
-});
-
-app.post('/blog', function(req,res) {
-  var data = req.body;
-  var post = new Post(data);
-  var datePattern = /(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}/;
-  if(datePattern.test(data.date)) {
-    var valid = {
-      "isValid": true
-    };
-    valid = JSON.stringify(valid);
-    res.setHeader('Content-Type', 'application/json; charset=utf8;');
-    res.end(valid);
-    post.save();
-  } else {
-    var valid = {
-      "isValid": false
-    };
-    valid = JSON.stringify(valid);
-    res.setHeader('Content-Type', 'application/json; charset=utf8;');
-    res.end(valid);
-  }
-});
-
-app.post('/work', function(req,res) {
-  var form = new multiparty.Form();
-  var count = 1;
-  Work.count({}, function(err, num) {
-    if(err) {
-    } else {
-      count = num+1;
-    }
-    form.parse(req, function(err, fields, files) {
-      var item = new Work({
-        name: fields.workTitle,
-        tech: fields.workTech,
-        link: fields.workLink,
-        picture: 'upload/work'+count+path.parse(files.workFile[0].path).ext
-      });
-      var newFilePath = './site/'+item.picture;
-      try {
-        fs.writeFileSync(path.resolve(newFilePath),fs.readFileSync(files.workFile[0].path));
-      } catch (err) {
-        console.log("файл не загрузился");
-      }
-      
-      if(fs.existsSync(path.resolve(newFilePath))) {
-        var valid = {
-          "isValid": true
-        };
-        item.save();
-        valid = JSON.stringify(valid);
-        res.setHeader('Content-Type', 'application/json; charset=utf8;');
-        res.end(valid);
-      } else {
-        var valid = {
-          "isValid": false
-        };
-        valid = JSON.stringify(valid);
-        res.setHeader('Content-Type', 'application/json; charset=utf8;');
-        res.end(valid);
-      }
-      console.log(item);
-    });
-  });
-  
-
-});
+// app.post('/skills', function(req,res) {
+//   var data = req.body;
+//   var counter = 0;
+//   var counterValid = 0;
+//   console.log(data);
+//   for (var item in data) {
+//     var buf = data[item];
+//     for (var val in buf) {
+//       console.log(buf[val]);
+//       counter++;
+//       if ((+buf[val]>=0)&&(+buf[val]<=100)) {
+//         counterValid++;
+//       }
+//     }
+//   }
+//   if (counter===counterValid) {
+//     var valid = {
+//       "isValid": true
+//     };
+//     valid = JSON.stringify(valid);
+//     res.setHeader('Content-Type', 'application/json; charset=utf8;');
+//     res.end(valid);
+//     var frontend = {
+//       section: "frontend",
+//       items: [
+//         {
+//           name: "html",
+//           value: +data.frontend.html
+//         },
+//         {
+//           name: "css",
+//           value: +data.frontend.css
+//         },
+//         {
+//           name: "js",
+//           value: +data.frontend.js
+//         }
+//         ]
+//     };
+//     var workflow = {
+//       section: "workflow",
+//       items: [
+//         {
+//           name: "git",
+//           value: +data.workflow.git
+//         },
+//         {
+//           name: "gulp",
+//           value: +data.workflow.gulp
+//         },
+//         {
+//           name: "bower",
+//           value: +data.workflow.bower
+//         }
+//       ]
+//     };
+//     var backend = {
+//       section: "backend",
+//       items: [
+//         {
+//           name: "php",
+//           value: +data.backend.php
+//         },
+//         {
+//           name: "nodejs",
+//           value: +data.backend.nodejs
+//         },
+//         {
+//           name: "mongodb",
+//           value: +data.backend.mongodb
+//         }
+//       ]
+//     };
+//     Skill.findOne({ section: "frontend" }, function (err, doc){
+//       if (!doc) {
+//         var doc = new Skill(frontend);
+//       } else {
+//         doc.items = frontend.items;
+//       }
+//       doc.save();
+//     });
+//     Skill.findOne({ section: "workflow" }, function (err, doc){
+//       if (!doc) {
+//         var doc = new Skill(workflow);
+//       } else {
+//         doc.items = workflow.items;
+//       }
+//       doc.save();
+//     });
+//     Skill.findOne({ section: "backend" }, function (err, doc){
+//       if (!doc) {
+//         var doc = new Skill(backend);
+//       } else {
+//         doc.items = backend.items;
+//       }
+//       doc.save();
+//     });
+//   } else {
+//     var valid = {
+//       "isValid": false
+//     };
+//     valid = JSON.stringify(valid);
+//     res.setHeader('Content-Type', 'application/json; charset=utf8;');
+//     res.end(valid);
+//   }
+//
+// });
 //--------
 
 //app.use(function(err,req,res,next) {
