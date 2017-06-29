@@ -1,0 +1,11 @@
+doctype html
+html
+  include modules/head/head.jade
+  body
+    .wrapper
+      h1.main-header App Control
+      form(method="POST" id="loginForm").login-form
+        h2.login-form__header Авторизация
+        input(type="text" placeholder="Login" id="formLogin").login-form__input
+        input(type="password" placeholder="Password" id="formPass").login-form__input
+        input(type="button" value="Авторизоваться" id="loginFormBtn").login-form__btn

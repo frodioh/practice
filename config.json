@@ -1,0 +1,26 @@
+{
+  "db": {
+    "host": "127.0.0.1",
+    "port": "27017",
+    "name": "admin",
+    "user": "admin",
+    "password": "admin"
+  },
+  "http": {
+    "port": 80,
+    "host": "85.143.213.73",
+    "publicRoot": "site"
+  },
+  "mail": {
+    "subject": "Сообщение с сайта-портфолио",
+    "smtp": {
+      "host": "smtp.gmail.com",
+      "port": 465,
+      "secure": true,
+      "auth": {
+        "user": "thesuperhitechman@gmail.com",
+        "pass": "iqjuxyrnkdonmxxi"
+      }
+    }
+  }
+}
