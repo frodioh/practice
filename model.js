@@ -19,17 +19,16 @@ var UserSchema = new Schema({
 
 //Приложения
 var AppSchema = new Schema({
-  name: String,
-  access: {
-    domen: String,
-    token: String
+  main: {
+    name: String,
+    baseUrl: String,
+    key: String
   },
-  colors: {
-    primary: String,
-    secondary: String
+  style: {
+    primaryColor: String,
+    secondaryColor: String
   },
   config: {
-    baseUrl: String,
     cache: Boolean,
     domCache: Boolean,
     material: Boolean,

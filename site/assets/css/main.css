@@ -87,6 +87,24 @@ html, body {
   border-top: 1px dashed currentColor;
 }
 
+.left-panel__bot {
+  display: flex;
+  flex-direction: column;
+}
+
+.connect-form {
+  padding: 0 10px 50px;
+}
+
+.connect-form__btn {
+  width: 100%;
+}
+
+.connect-form__input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 .left-panel__list {
   margin: 0;
   padding: 0;

@@ -6,16 +6,21 @@ html
       .container
         .left-panel
           ul.left-panel__list
-            li(data-tab="main").active.left-panel__item.
-              Основные настройки
+            li(data-tab="config").active.left-panel__item.
+              Конфигурация приложения
             li(data-tab="styles").left-panel__item.
               Стили
-            li(data-tab="config").left-panel__item.
-              Конфигурация приложения
-          a(href="#").left-panel__exit Выход
+          .left-panel__bot
+            form(method="POST").connect-form
+              label
+                | Ключ:
+                input(type="text")#connectKey.connect-form__input
+              label
+                | Домен:
+                input(type="text")#connectDomen.connect-form__input
+              input(type="button" value="Подключиться").connect-form__btn
+            a(href="#").left-panel__exit Выход
         .content
-          .content__item.active#main.
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum asperiores molestias est laboriosam provident fugiat, fuga officia distinctio ipsam quod praesentium expedita earum dignissimos, sint facere at obcaecati consectetur laudantium.
           .content__item#styles.
             222Lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint porro hic dolorum totam, reprehenderit accusantium unde accusamus quis, eveniet nisi facilis quo, eaque. In suscipit repudiandae quia cupiditate corrupti omnis.
           .content__item#config.
