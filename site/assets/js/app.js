@@ -63,6 +63,10 @@ window.addEventListener('click', function() {
     var exitBtn = document.querySelector('.left-panel__exit');
     exitBtn.addEventListener('click', function(e) {
       e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '/logout'
+      });
     });
   }
 });

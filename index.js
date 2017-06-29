@@ -103,6 +103,10 @@ app.post('/auth', function(req,res) {
     }
   });
 });
+app.post('/logout', function(req, res) {
+  req.session.destroy();
+  res.redirect('/');
+});
 app.get('/admin.html', function(req,res) {
   res.setHeader('Content-Type', 'text/html; charset=utf8');
   res.render('admin');
