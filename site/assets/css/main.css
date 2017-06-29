@@ -54,3 +54,72 @@ html, body {
   cursor: pointer;
   background: #ddd;
 }
+
+.admin {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  min-height: 100%;
+  width: 80%;
+  margin: auto;
+  box-shadow: 1px 0 10px 2px #000,
+  -1px 0 10px 2px #000;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20%;
+  background: #fff;
+  border-right: 1px solid #000;
+}
+
+.left-panel__exit {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  border-top: 1px dashed currentColor;
+}
+
+.left-panel__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.left-panel__item {
+  padding: 20px 40px;
+  cursor: pointer;
+  font-weight: bold;
+  border-bottom: 1px dashed #000;
+  transition: all .3s;
+}
+
+.left-panel__item:hover {
+  color: #fff;
+  background: #000;
+}
+
+.left-panel__item.active {
+  color: #fff;
+  background: #000;
+}
+
+.content {
+  width: 80%;
+  padding: 40px;
+}
+
+.content__item {
+  display: none;
+}
+
+.content__item.active {
+  display: block;
+}

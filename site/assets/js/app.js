@@ -44,4 +44,25 @@ window.addEventListener('click', function() {
     });
   }
 
+  if (document.querySelector('.left-panel__exit')) {
+    var tabs = document.querySelectorAll('.left-panel__item');
+    for(var i = 0; i < tabs.length; i++) {
+      tabs[i].addEventListener('click', function() {
+        var selector = this.getAttribute('data-tab');
+        var contentItems = document.querySelectorAll('.content__item');
+        var content = document.querySelector('#'+selector);
+        for(var i = 0; i < contentItems.length; i++) {
+          contentItems[i].classList.remove('active');
+          tabs[i].classList.remove('active');
+        }
+        content.classList.add('active');
+        this.classList.add('active');
+      });
+    }
+
+    var exitBtn = document.querySelector('.left-panel__exit');
+    exitBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+    });
+  }
 });

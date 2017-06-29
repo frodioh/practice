@@ -2,10 +2,21 @@ doctype html
 html
   include modules/head/head.jade
   body
-    .wrapper
-      h1.main-header App Control
-      form(method="POST" id="loginForm").login-form
-        h2.login-form__header Авторизация
-        input(type="text" placeholder="Login" id="formLogin").login-form__input
-        input(type="password" placeholder="Password" id="formPass").login-form__input
-        input(type="button" value="Авторизоваться" id="loginFormBtn").login-form__btn
+    .admin
+      .container
+        .left-panel
+          ul.left-panel__list
+            li(data-tab="main").active.left-panel__item.
+              Основные настройки
+            li(data-tab="styles").left-panel__item.
+              Стили
+            li(data-tab="config").left-panel__item.
+              Конфигурация приложения
+          a(href="#").left-panel__exit Выход
+        .content
+          .content__item.active#main.
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum asperiores molestias est laboriosam provident fugiat, fuga officia distinctio ipsam quod praesentium expedita earum dignissimos, sint facere at obcaecati consectetur laudantium.
+          .content__item#styles.
+            222Lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint porro hic dolorum totam, reprehenderit accusantium unde accusamus quis, eveniet nisi facilis quo, eaque. In suscipit repudiandae quia cupiditate corrupti omnis.
+          .content__item#config.
+            333lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque alias iste, quaerat, sequi labore velit et error amet excepturi dolores at dolor, aut qui veniam aliquam sed facilis a atque!
