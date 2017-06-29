@@ -65,7 +65,10 @@ window.addEventListener('click', function() {
       e.preventDefault();
       $.ajax({
         type: 'POST',
-        url: '/logout'
+        url: '/logout',
+        success: function() {
+          location = '/';
+        }
       });
     });
   }
